@@ -12,9 +12,9 @@ through Nutrient even when the file is attached to the chat.
 
 1. Add the plugin, then connect the Nutrient connector and sign in with your Nutrient account. The tools appear once
    you're signed in.
-   - In Claude Code, install it with `/plugin install nutrient --marketplace PSPDFKit-labs/nutrient-mcp-plugins`, then
+   - In Claude Code, install it with `/plugin install nutrient --marketplace PSPDFKit/nutrient-mcp-plugins`, then
      run `/mcp`, choose `plugin:nutrient:nutrient` and sign in.
-   - In Codex, install it with `codex plugin marketplace add PSPDFKit-labs/nutrient-mcp-plugins` and
+   - In Codex, install it with `codex plugin marketplace add PSPDFKit/nutrient-mcp-plugins` and
      `codex plugin add nutrient@nutrient`, sign in with `codex mcp login nutrient`, then start a new session.
 2. Attach a PDF, Office document or image, point to a file on disk or an HTTPS link, and ask to parse it, convert it to
    Markdown, extract fields or tables, or classify it.
@@ -30,9 +30,9 @@ Owner on Team and Enterprise plans); otherwise Claude asks you to drop the file 
 
 The plugin sends the documents you ask the assistant to process, and the instructions for each run, to your Nutrient
 DWS account through `mcp.nutrient.io`; it sends them nowhere else. To send a file from your computer, or one attached
-to the chat, the assistant runs a one-time curl command that the connector returns: it uploads only the files you named
-to `mcp.nutrient.io` and expires within five minutes. Uploaded files are kept for 24 hours. DWS keeps each run for your
-plan's retention period, and each run uses your DWS credits. Opening a document in the Nutrient panel's full-screen
+to the chat, the assistant runs a short-lived curl command that the connector returns: it uploads only the files you
+named to `mcp.nutrient.io` and expires within five minutes. Uploaded files are kept for 24 hours. DWS keeps each run for
+your plan's retention period, and each run uses your DWS credits. Opening a document in the Nutrient panel's full-screen
 review stores a copy in DWS Viewer, which stays until you delete it and counts toward your plan's document limit.
 Summaries and questions about a document stay with the assistant's own reading unless you ask for one of these
 operations.

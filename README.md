@@ -7,11 +7,11 @@ Nutrient, even when the file is attached to the chat.
 
 ## Install
 
-- **Claude Code**: `/plugin install nutrient --marketplace PSPDFKit-labs/nutrient-mcp-plugins`
+- **Claude Code**: `/plugin install nutrient --marketplace PSPDFKit/nutrient-mcp-plugins`
 - **claude.ai, Claude desktop and Cowork**: open Customize, Plugins, Add, Add marketplace, and enter
-  `https://github.com/PSPDFKit-labs/nutrient-mcp-plugins`. Then add the Nutrient plugin and connect its connector from
+  `https://github.com/PSPDFKit/nutrient-mcp-plugins`. Then add the Nutrient plugin and connect its connector from
   the plugin's Connectors tab with your Nutrient account.
-- **Codex**: `codex plugin marketplace add PSPDFKit-labs/nutrient-mcp-plugins`, then
+- **Codex**: `codex plugin marketplace add PSPDFKit/nutrient-mcp-plugins`, then
   `codex plugin add nutrient@nutrient`, and sign in with your Nutrient account when Codex asks.
 
 On Team and Enterprise plans, an Owner can roll the plugin out to the whole organization.

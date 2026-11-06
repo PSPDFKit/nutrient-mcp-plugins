@@ -7,7 +7,7 @@
     "url": "https://www.nutrient.io"
   },
   "homepage": "https://www.nutrient.io/api/",
-  "repository": "https://github.com/PSPDFKit-labs/nutrient-mcp-plugins",
+  "repository": "https://github.com/PSPDFKit/nutrient-mcp-plugins",
   "license": "MIT",
   "keywords": [
     "documents",
