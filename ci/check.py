@@ -78,12 +78,13 @@ for folder in (ROOT, PLUGIN):
     check(readme.exists() and words(readme.read_text()) >= 40, f"{readme.relative_to(ROOT)} has at least 40 words of prose")
     check((folder / "LICENSE").exists(), f"{(folder / 'LICENSE').relative_to(ROOT)} exists")
 
-# OpenAI (ChatGPT and Codex): .codex-plugin/plugin.json shares .mcp.json and skills/ with Claude's manifest.
+# OpenAI (ChatGPT and Codex): .codex-plugin/plugin.json shares skills/ with Claude's manifest, and has its own MCP file,
+# because Codex needs a field that Anthropic's directory refuses in .mcp.json (see the connector checks below).
 codex = load(PLUGIN / ".codex-plugin" / "plugin.json")
 check(codex.get("name") == manifest.get("name") and codex.get("version") == manifest.get("version"),
       ".codex-plugin/plugin.json has the same name and version as .claude-plugin/plugin.json")
-check(codex.get("mcpServers") == "./.mcp.json" and codex.get("skills") == "./skills/",
-      ".codex-plugin/plugin.json uses the shared .mcp.json and skills/")
+check(codex.get("mcpServers") == "./.codex-plugin/mcp.json" and codex.get("skills") == "./skills/",
+      ".codex-plugin/plugin.json uses its own .codex-plugin/mcp.json and the shared skills/")
 interface = codex.get("interface", {})
 # OpenAI's submission limits (developers.openai.com/plugins/deploy/submission).
 limit(codex.get("name"), 64, ".codex-plugin/plugin.json name")
@@ -130,12 +131,22 @@ check(len(openai_entries) == 1 and (ROOT / openai_entries[0].get("source", {}).g
 check(len(openai_entries) == 1 and openai_entries[0].get("policy", {}).get("installation") in ("AVAILABLE", "INSTALLED_BY_DEFAULT", "NOT_AVAILABLE"),
       ".agents/plugins/marketplace.json gives the plugin a valid installation policy")
 
-servers = load(PLUGIN / ".mcp.json").get("mcpServers", {})
-check(list(servers) == ["nutrient"] and servers["nutrient"].get("type") == "http" and servers["nutrient"].get("url") == SERVICE,
-      f".mcp.json declares one server, nutrient, at {SERVICE} over HTTP (OpenAI connects one server per plugin)")
+for mcp_file in (".mcp.json", ".codex-plugin/mcp.json"):
+    servers = load(PLUGIN / mcp_file).get("mcpServers", {})
+    check(list(servers) == ["nutrient"] and servers["nutrient"].get("type") == "http" and servers["nutrient"].get("url") == SERVICE,
+          f"{mcp_file} declares one server, nutrient, at {SERVICE} over HTTP (OpenAI connects one server per plugin)")
+# Anthropic's directory refuses any other field on a remote server in Claude's .mcp.json from an organization it hasn't
+# Verified, and the refusal blocks the release. These are the fields its policy check lists.
+claude_server = load(PLUGIN / ".mcp.json").get("mcpServers", {}).get("nutrient", {})
+oauth = claude_server.get("oauth", {})
+check(isinstance(oauth, dict), ".mcp.json oauth is an object")
+extra = set(claude_server) - {"type", "url", "headers", "timeout", "alwaysLoad", "oauth", "name", "title", "displayName", "description"}
+extra |= {f"oauth.{key}" for key in (oauth if isinstance(oauth, dict) else {})} - {"oauth.clientId", "oauth.callbackPort", "oauth.authServerMetadataUrl", "oauth.scopes"}
+check(not extra, f".mcp.json has only fields Anthropic's directory accepts; remove: {', '.join(sorted(extra))}")
 # Without scopes, Codex asks for every scope the authorization server lists, and the service can't use that grant.
-check(servers.get("nutrient", {}).get("scopes") == ["mcp:invoke", "offline_access"],
-      ".mcp.json requests the service's own scopes, mcp:invoke and offline_access")
+# Codex reads them only at the top of the server entry, not under oauth.
+check(load(PLUGIN / ".codex-plugin" / "mcp.json").get("mcpServers", {}).get("nutrient", {}).get("scopes") == ["mcp:invoke", "offline_access"],
+      ".codex-plugin/mcp.json requests the service's own scopes, mcp:invoke and offline_access")
 
 skills = sorted((PLUGIN / "skills").glob("*/SKILL.md"))
 check(len(skills) > 0, "the plugin has at least one skill")

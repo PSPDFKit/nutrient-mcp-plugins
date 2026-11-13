@@ -19,8 +19,8 @@ On Team and Enterprise plans, an Owner can roll the plugin out to the whole orga
 ## Contents
 
 - [`plugins/nutrient`](plugins/nutrient): the plugin, with its [README](plugins/nutrient/README.md), which says what it
-  sends to Nutrient. Claude reads `.claude-plugin/plugin.json` and OpenAI reads `.codex-plugin/plugin.json`; both use
-  the same connector (`.mcp.json`) and skill.
+  sends to Nutrient. Claude reads `.claude-plugin/plugin.json` and `.mcp.json`, and OpenAI reads
+  `.codex-plugin/plugin.json` and `.codex-plugin/mcp.json`; both connect to the same service and use the same skill.
 - [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) and
   [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json): list the plugin, so this repository works as a
   marketplace for Claude and for Codex

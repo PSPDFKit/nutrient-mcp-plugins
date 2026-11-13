@@ -9,7 +9,7 @@
       "name": "nutrient",
       "source": "./plugins/nutrient",
       "description": "Extract data from PDFs, Office files, images and scans, with page citations and warnings for values to check. Also convert documents to Markdown and classify them. Uses your Nutrient account.",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "author": { "name": "Nutrient", "url": "https://www.nutrient.io" },
       "homepage": "https://www.nutrient.io/api/",
       "license": "MIT"
