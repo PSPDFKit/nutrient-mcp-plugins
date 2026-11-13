@@ -1,8 +1,9 @@
 # Nutrient MCP plugins: agent guidance
 
 This repository publishes one plugin, `plugins/nutrient`, to Claude and to OpenAI (ChatGPT and Codex). Claude reads
-`.claude-plugin/plugin.json`, OpenAI reads `.codex-plugin/plugin.json`, and both share `.mcp.json`, `skills/` and the
-README and license. `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json` list it for each host.
+`.claude-plugin/plugin.json` and `.mcp.json`, OpenAI reads `.codex-plugin/plugin.json` and `.codex-plugin/mcp.json`,
+and both share `skills/` and the README and license. `.claude-plugin/marketplace.json` and
+`.agents/plugins/marketplace.json` list it for each host.
 Anthropic's directory tracks this repository's default branch, so every merge to `main` is a release candidate there;
 OpenAI's directory takes a ZIP of `plugins/nutrient`, uploaded for each release.
 
@@ -22,9 +23,12 @@ OpenAI's directory takes a ZIP of `plugins/nutrient`, uploaded for each release.
 
 Never change `name` in `plugin.json`: it is the plugin's permanent identity.
 
-Keep `scopes` in `.mcp.json`. Without it, Codex asks for every scope the authorization server lists instead of the
-service's own, and the service can't exchange that grant, so every tool call fails. Claude Code asks for the same pair,
-taken from the service's sign-in challenge, and ChatGPT for the scopes the service advertises. `ci/check.py` checks it.
+Keep `scopes` in `.codex-plugin/mcp.json`, at the top of the server entry. Without it, Codex asks for every scope the
+authorization server lists instead of the service's own, and the service can't exchange that grant, so every tool call
+fails. Codex doesn't read `oauth.scopes`. Keep it out of `.mcp.json`: Anthropic's directory refuses fields outside its
+list from organizations it hasn't Verified, and a remote server there may have only `type`, `url`, `headers`,
+`timeout`, `alwaysLoad`, `oauth` and text fields. Claude Code asks for the same pair, taken from the service's sign-in
+challenge, and ChatGPT for the scopes the service advertises. `ci/check.py` checks both files.
 
 ## Refreshing the tool snapshot
 

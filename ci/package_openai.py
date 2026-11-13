@@ -28,7 +28,7 @@ files = sorted(
     and not EXCLUDED_DIRECTORIES & set(path.relative_to(PLUGIN).parts[:-1])
 )
 names = [path.relative_to(PLUGIN).as_posix() for path in files]
-for required in (".codex-plugin/plugin.json", ".mcp.json"):
+for required in (".codex-plugin/plugin.json", ".codex-plugin/mcp.json"):
     if required not in names:
         sys.exit(f"FAIL the package has no {required}")
 

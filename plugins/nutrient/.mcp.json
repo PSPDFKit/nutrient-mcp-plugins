@@ -2,11 +2,7 @@
   "mcpServers": {
     "nutrient": {
       "type": "http",
-      "url": "https://mcp.nutrient.io/mcp",
-      "scopes": [
-        "mcp:invoke",
-        "offline_access"
-      ]
+      "url": "https://mcp.nutrient.io/mcp"
     }
   }
 }
